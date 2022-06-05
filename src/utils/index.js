@@ -115,3 +115,26 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+export function timeFormat(time, start, end){
+  let result = ''
+  if(start <= 0 && end > 0){
+    result += time.getFullYear()
+  }
+  if(start <= 1 && end >= 1){
+    result += '-' + (time.getMonth() + 1 >= 10 ? (time.getMonth() + 1) : '0' + (time.getMonth() + 1))
+  }
+  if(start <= 2 && end >= 2){
+    result += '-' + (time.getDate() >= 10 ? time.getDate() : '0' + time.getDate())
+  }
+  if(start <= 3 && end >= 3){
+    result += ' ' + (time.getHours() >= 10 ? time.getHours() : '0' + time.getHours())
+  }
+  if(start <= 4 && end >= 4){
+    result += ':' + (time.getMinutes() >= 10 ? time.getMinutes() : '0' + time.getMinutes())
+  }
+  if(start <= 5 && end >= 5){
+    result += ':' + (time.getSeconds() >= 10 ? time.getSeconds() : '0' + time.getSeconds())
+  }
+  return result
+}

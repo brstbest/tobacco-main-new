@@ -32,6 +32,24 @@ module.exports = {
   devServer: {
     port: port,
     proxy: {
+      '/weather':{
+        port:8080,
+        target: 'https://devapi.qweather.com/',
+        secure: false,  // 如果是https接口，需要配置这个参数
+        changeOrigin: true,  //是否跨域
+        pathRewrite: {
+          '^/weather': ''
+        }
+      },
+      '/geo':{
+        port:8080,
+        target: 'https://geoapi.qweather.com/',
+        secure: false,  // 如果是https接口，需要配置这个参数
+        changeOrigin: true,  //是否跨域
+        pathRewrite: {
+          '^/geo': ''
+        }
+      },
       '/api': {
         target: 'http://121.40.194.16:25664',
         changeOrigin: true,

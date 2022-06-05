@@ -1,13 +1,8 @@
 import request from '@/utils/request'
 
 export function login(data) {
-  console.log('request data', data)
   return request({
     url: '/api/user/login',
-    // url: '//LoginPage/Login',
-    // url: '/api/LoginPage/Login',
-    // url: '/api/user/login',
-    // url: '/api/loginPage/login',
     method: 'post',
     data
   })
@@ -46,7 +41,7 @@ export function logout() {
 
 export function changeUserInfo(data) {
   return request({
-    url: `api/user/alterUserInfo/`,
+    url: 'api/user/alterUserInfo',
     method: 'post',
     data
   })

@@ -8,6 +8,14 @@ export function searchStation(data) {
   })
 }
 
+export function addStation(data) {
+  return request({
+    url: '/api/station/addStation',
+    method: 'post',
+    data
+  })
+}
+
 export function alterStation(data) {
   return request({
     url: '/api/station/alterStation',

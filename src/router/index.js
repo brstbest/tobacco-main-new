@@ -49,121 +49,142 @@ export const constantRoutes = [
     children: [{
       path: 'home',
       name: 'Home',
-      component: () => import('@/views/production_module/index'),
-      meta: { title: '首页', icon: 'el-icon-s-home', permission: ["0", "1", "2", "3"] }
+      component: () => import('@/views/production_main/index.vue'),
+      meta: { title: '生产板块主页', icon: 'el-icon-s-home', permission: ["0", "1", "2", "3"] }
     }]
   },
   {
     path: '/',
     component: Layout,
-    redirect: '/harvest',
+    redirect: '/home2',
     children: [{
-      path: 'harvest',
-      name: 'Harvest',
-      component: () => import('@/views/production_module/harvest'),
-      meta: { title: '采编管理', icon: 'el-icon-s-opportunity', permission: ["0", "1", "2", "3"] }
+      path: 'home2',
+      name: 'Home2',
+      component: () => import('@/views/technology_main/index.vue'),
+      meta: { title: '技术板块主页', icon: 'el-icon-s-home', permission: ["0", "1", "2", "3"] }
     }]
   },
   {
-    path: '/bake',
+    path: '/',
     component: Layout,
-    redirect: '/bake/sdevice',
-    name: 'Bake',
-    meta: { title: '烘烤管理', icon: 'el-icon-odometer' },
-    children: [
-      {
-        path: 'sdevice',
-        name: 'DeviceSupervision',
-        component: () => import('@/views/bake_module/sdevice'),
-        meta: { title: '设备监管', icon: '', permission: ["0", "1", "2", "3"] }
-      },
-      {
-        path: 'record',
-        name: 'Record',
-        component: () => import('@/views/bake_module/record'),
-        meta: { title: '烘烤记录', icon: '', permission: ["0", "1", "2", "3"] }
-      },
-      {
-        path: 'mdevice',
-        name: 'DeviceManagement',
-        component: () => import('@/views/bake_module/mdevice'),
-        meta: { title: '设备管理', icon: '', permission: ["0", "1", "2", "3"] }
-      },
-      {
-        path: 'station',
-        name: 'Station',
-        component: () => import('@/views/bake_module/station'),
-        meta: { title: '烟站管理', icon: '', permission: ["0", "1", "2", "3"] }
-      }
-    ]
+    redirect: '/home3',
+    children: [{
+      path: 'home3',
+      name: 'Home3',
+      component: () => import('@/views/device_main/index.vue'),
+      meta: { title: '设备板块主页', icon: 'el-icon-s-home', permission: ["0", "1", "2", "3"] }
+    }]
   },
-
   {
-    path: '/analysis',
+    path: '/',
     component: Layout,
-    redirect: '/analysis/bdata',
-    name: 'Analysis',
-    meta: { title: '数据分析', icon: 'el-icon-s-order' },
-    children: [
-      {
-        path: 'bdata',
-        name: 'BData',
-        component: () => import('@/views/analysis_module/bdata'),
-        meta: { title: '采烤数据', icon: '', permission: ["0", "1", "2", "3"] }
-      },
-      {
-        path: 'other',
-        name: 'Other',
-        component: () => import('@/views/analysis_module/other'),
-        meta: { title: '其它数据', icon: '', permission: ["0", "1", "2", "3"] }
-      },
-      {
-        path: 'index',
-        name: 'Index',
-        component: () => import('@/views/analysis_module/index'),
-        meta: { title: '评分对比', icon: '', permission: ["0", "1", "2", "3"] }
-      },
-      {
-        path: 'line',
-        name: 'Line',
-        component: () => import('@/views/analysis_module/line'),
-        meta: { title: '智能曲线', icon: '', permission: ["0", "1", "2", "3"] }
-      },
-      {
-        path: 'mdata',
-        name: 'MData',
-        component: () => import('@/views/analysis_module/mdata'),
-        meta: { title: '数据展示', icon: '', permission: ["0", "1", "2", "3"] }
-      },
-      {
-        path: 'qdata',
-        name: 'QData',
-        component: () => import('@/views/analysis_module/qdata'),
-        meta: { title: '数据查询', icon: '', permission: ["0", "1", "2", "3"] }
-      },
-    ]
+    redirect: '/bakeryList',
+    children: [{
+      path: 'bakeryList',
+      name: 'BakeryList',
+      component: () => import('@/views/bakery_list/index'),
+      meta: { title: '烤房列表', icon: 'el-icon-s-order', permission: ["0", "1", "2", "3"] }
+    }]
   },
-
   {
-    path: '/user',
+    path: '/',
     component: Layout,
-    redirect: '/user/index',
-    name: 'User',
-    meta: { title: '用户管理', icon: 'el-icon-s-custom' },
-    children: [
-      {
-        path: 'index',
-        name: 'Index',
-        component: () => import('@/views/user_module/index'),
-        meta: { title: '个人管理', icon: '', permission: ["0", "1", "2", "3"] }
-      },
-      {
-        path: 'user',
-        name: 'MUser',
-        component: () => import('@/views/user_module/user'), // Parent router-view
-        meta: { title: '账号管理', permission: ["0", "1", "2", "3"] }
-      }
-    ]
+    redirect: '/bakeryDetail',
+    children: [{
+      path: 'bakeryDetail',
+      name: 'BakeryDetail',
+      component: () => import('@/views/bakery_detail/index'),
+    }]
+  },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/lineModel',
+    children: [{
+      path: 'lineModel',
+      name: 'LineModel',
+      component: () => import('@/views/line_model/index'),
+      meta: { title: '曲线模型', icon: 'el-icon-s-marketing', permission: ["0", "1", "2", "3"] }
+    }]
+  },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/structureManagement',
+    children: [{
+      path: 'structureManagement',
+      name: 'StructureManagement',
+      component: () => import('@/views/structure_management/index'),
+      meta: { title: '组织架构', icon: 'el-icon-location', permission: ["0", "1", "2", "3"] }
+    }]
+  },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/userManagement',
+    children: [{
+      path: 'userManagement',
+      name: 'UserManagement',
+      component: () => import('@/views/user_management/index'),
+      meta: { title: '用户管理', icon: 'el-icon-user-solid', permission: ["0", "1", "2", "3"] }
+    }]
+  },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/personalManagement',
+    children: [{
+      path: 'personalManagement',
+      name: 'PersonalManagement',
+      component: () => import('@/views/personal_management/index'),
+    }]
+  },
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/userManagement',
+  //   name: 'User',
+  //   meta: { title: '用户管理', icon: 'el-icon-s-custom' },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'Index',
+  //       component: () => import('@/views/user_module/index'),
+  //       meta: { title: '个人管理', icon: '', permission: ["0", "1", "2", "3"] }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/user',
+  //   component: Layout,
+  //   redirect: '/user/index',
+  //   name: 'User',
+  //   meta: { title: '用户管理', icon: 'el-icon-s-custom' },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'Index',
+  //       component: () => import('@/views/user_module/index'),
+  //       meta: { title: '个人管理', icon: '', permission: ["0", "1", "2", "3"] }
+  //     },
+  //     {
+  //       path: 'user',
+  //       name: 'MUser',
+  //       component: () => import('@/views/user_management/index'), // Parent router-view
+  //       meta: { title: '账号管理', permission: ["0", "1", "2", "3"] }
+  //     }
+  //   ]
+  // },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/test',
+    children: [{
+      path: 'test',
+      name: 'Test',
+      component: () => import('@/views/test.vue'),
+      meta: { title: '测试用页面', icon: 'el-icon-close', permission: ["0", "1", "2", "3"] }
+    }]
   },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

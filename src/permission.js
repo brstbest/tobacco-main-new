@@ -21,16 +21,16 @@ router.beforeEach(async(to, from, next) => {
   const hasToken = getToken()
 
   if (hasToken) {
-    console.log('HasToken', hasToken)
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()
-    } else {
+    }
+    else {
       const hasGetUserInfo = store.getters.name
       const userToken = store.getters.token
       if (userToken) {
-        let category = JSON.parse(localStorage.getItem('user')).category
+        let category = JSON.parse(sessionStorage.getItem('user')).category
         console.log('category', category)
         // if(to.meta.permission.indexOf(category) === -1){
         //   Message.error('No permission!')
@@ -38,13 +38,15 @@ router.beforeEach(async(to, from, next) => {
         // }
         // else
         next()
-      } else {
+      }
+      else {
         try {
           // get user info
           await store.dispatch('user/getInfo')
 
           next()
-        } catch (error) {
+        }
+        catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')

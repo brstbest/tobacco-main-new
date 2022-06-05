@@ -31,3 +31,11 @@ export function deleteDevice(data) {
     data
   })
 }
+
+export function searchBakingDevice(data) {
+  return request({
+    url: '/api/device/bakingDevice',
+    method: 'post',
+    data
+  })
+}

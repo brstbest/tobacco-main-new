@@ -16,10 +16,13 @@
   "dependencies": {
     "axios": "0.18.1",
     "core-js": "3.6.5",
+    "docxtemplater": "^3.9.1",
     "echarts": "^4.8.0",
     "element-ui": "^2.15.6",
     "file-saver": "^2.0.5",
     "js-cookie": "2.2.0",
+    "jszip": "^2.6.1",
+    "jszip-utils": "^0.0.2",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",

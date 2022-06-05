@@ -16,7 +16,7 @@
               首页
             </el-dropdown-item>
           </router-link>
-          <router-link to="/user/index">
+          <router-link to="/personalManagement">
             <el-dropdown-item>
               个人信息
             </el-dropdown-item>

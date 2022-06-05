@@ -15,6 +15,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 import VueECharts from 'vue-echarts'
+import * as echarts from 'echarts'
 import ECharts from 'echarts'
 import "vue-easytable/libs/theme-default/index.css";
 import VueEasytable from "vue-easytable";
@@ -26,10 +27,10 @@ import VueEasytable from "vue-easytable";
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
-if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('../mock')
-  mockXHR()
-}
+// if (process.env.NODE_ENV === 'production') {
+//   const { mockXHR } = require('../mock')
+//   mockXHR()
+// }
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })

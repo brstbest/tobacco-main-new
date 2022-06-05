@@ -11,6 +11,7 @@ const getDefaultState = () => {
     phone: '',
     category: '',
     nname: '',
+    permission_range: '',
   }
 }
 
@@ -40,6 +41,9 @@ const mutations = {
   },
   SET_CATEGORY: (state, category) => {
     state.category = category
+  },
+  SET_PERMISSIONRANGE: (state, permission_range) => {
+    state.permission_range = permission_range
   }
 }
 
@@ -52,8 +56,13 @@ const actions = {
         let data = response.data
         // data = JSON.parse(data)
         commit('SET_TOKEN', data.token)
+        commit('SET_USERID', data.user_id)
+        commit('SET_PHONE', data.phone)
+        commit('SET_NNAME', data.nname)
+        commit('SET_CATEGORY', data.category)
+        commit('SET_PERMISSIONRANGE', data.permission_range)
         setToken(data.token)
-        localStorage.setItem('user', JSON.stringify(data))
+        sessionStorage.setItem('user', JSON.stringify(data))
         resolve()
       }).catch(error => {
         reject(error)
@@ -92,6 +101,8 @@ const actions = {
     return new Promise((resolve, reject) => {
       removeToken() // must remove  token  first
       resetRouter()
+      commit('RESET_STATE')
+      sessionStorage.clear()
       resolve()
       // logout(state.token).then(() => {
       //   removeToken() // must remove  token  first
