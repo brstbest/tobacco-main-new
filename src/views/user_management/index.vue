@@ -4,6 +4,7 @@
       <el-input v-model="search_text" placeholder="请输入用户名/手机号" style="width: 18.75rem; margin-right: 1.25rem;" :size="size"></el-input>
       <el-button type="primary" @click="searchClick" :size="size">查询</el-button>
       <el-button type="success" size="small" @click="createDialogVisible = true" icon="el-icon-plus" style="float: right;" :size="size">新增用户</el-button>
+      <el-button type="warning" size="small" @click="createBatchDialogVisible = true" icon="el-icon-plus" style="float: right;" :size="size" plain>批量新增</el-button>
       <el-button type="primary" plain size="small" @click="search_text = 'DV_TEST1'" style="float: right;" :size="size">烤房</el-button>
       <el-button type="primary" plain size="small" @click="search_text = 'GR_TEST1'" style="float: right;" :size="size">烤房群</el-button>
       <el-button type="primary" plain size="small" @click="search_text = 'ST_TEST1'" style="float: right;" :size="size">烟站</el-button>
@@ -54,7 +55,10 @@
     <el-dialog title="新增用户" :visible.sync="createDialogVisible" v-if="createDialogVisible" :destroy-on-close="true" width="30%">
       <AddUser @watchChild="closeDialog"></AddUser>
     </el-dialog>
-    <el-dialog title="编辑用户" :visible.sync="editDialogVisible" :destroy-on-close="true" width="30%">
+    <el-dialog title="批量新增" :visible.sync="createBatchDialogVisible" v-if="createBatchDialogVisible" :destroy-on-close="true" width="50%">
+      <AddUserBatch @watchChild="closeDialog"></AddUserBatch>
+    </el-dialog>
+    <el-dialog title="编辑用户" :visible.sync="editDialogVisible" v-if="editDialogVisible" :destroy-on-close="true" width="30%">
       <EditUser @watchChild="closeDialog" :row-msg="editRow"></EditUser>
     </el-dialog>
 
@@ -64,6 +68,7 @@
 <script>
   import AddUser from './components/AddUser'
   import EditUser from './components/EditUser'
+  import AddUserBatch from './components/AddUserBatch'
   import categoryJSON from '/public/static/map/category.json'
   import postcodeOption from '/public/static/map/postcodeOption.json'
 
@@ -79,6 +84,7 @@
     components: {
       AddUser,
       EditUser,
+      AddUserBatch
     },
     data() {
       return {
@@ -90,6 +96,7 @@
         currentPage: 1,
         total: 0,
         createDialogVisible: false,
+        createBatchDialogVisible: false,
         editDialogVisible: false,
         deleteDialogVisible: false,
         editRow: {},
@@ -173,6 +180,7 @@
       },
       closeDialog(data) {
         this.createDialogVisible = false
+        this.createBatchDialogVisible = false
         this.editDialogVisible = false
         this.deleteDialogVisible = false
       },

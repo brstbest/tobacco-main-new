@@ -143,7 +143,14 @@
           { key: 'windScale', label: '风力' },
           { key: 'windSpeed', label: '风速' },
         ],
-        weatherData: {},
+        weatherData: {
+          text: '',
+          temp: '',
+          precip: '',
+          windDir: '',
+          windScale: '',
+          windSpeed: '',
+        },
       }
     },
     created() {
@@ -180,6 +187,10 @@
         }
       },
       async requestWeather() {
+        if(this.deviceData.location == '' || this.deviceData.location == null || this.deviceData.parent_location == '' || this.deviceData.parent_location == null){
+          console.log(this.deviceData)
+          return false
+        }
         let key = '9bd19529a8564d9a9e00bc29e8fada85'
         let location = this.postcodeJSON[this.deviceData.location]
         let adm = this.postcodeJSON[this.deviceData.parent_location]

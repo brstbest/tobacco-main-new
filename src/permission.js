@@ -18,9 +18,12 @@ router.beforeEach(async(to, from, next) => {
   document.title = getPageTitle(to.meta.title)
 
   // determine whether the user has logged in
-  const hasToken = getToken()
+  // const hasToken = getToken()
+  const hasLogin = sessionStorage.getItem('user')
+  console.log('hasToken', hasLogin)
 
-  if (hasToken) {
+  if (hasLogin) {
+    console.log('to.path', to.path)
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({ path: '/' })
@@ -30,8 +33,8 @@ router.beforeEach(async(to, from, next) => {
       const hasGetUserInfo = store.getters.name
       const userToken = store.getters.token
       if (userToken) {
-        let category = JSON.parse(sessionStorage.getItem('user')).category
-        console.log('category', category)
+        // let category = JSON.parse(sessionStorage.getItem('user')).category
+        // console.log('category', category)
         // if(to.meta.permission.indexOf(category) === -1){
         //   Message.error('No permission!')
         //   return

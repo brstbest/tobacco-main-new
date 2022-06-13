@@ -2,7 +2,7 @@
 
   <div>
     <div class="row" >
-      <img :src="user.avatar" alt="用户头像" class="user-img">
+      <!-- <img :src="user.avatar" alt="用户头像" class="user-img"> -->
 <!--      <div class="col" style="margin:0 0 0 2rem;">-->
 <!--        <div class="user-nname" style="width: 13rem">{{ user.nname }}</div>-->
 <!--      </div>-->

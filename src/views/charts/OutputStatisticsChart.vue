@@ -31,16 +31,19 @@
     },
     methods: {
       fetchData() {
+        console.log('dataMsg', this.dataMsg)
         for(let i=0; i<6; i++){
           let w_sum = 0
           let wt_sum = 0
-          for(let j=0; j<this.dataMsg[i.toString()].water.length; j++){
-            w_sum += this.dataMsg[i.toString()].water[j] * this.dataMsg[i.toString()].weight[j]
-            wt_sum += this.dataMsg[i.toString()].weight[j]
-          }
-          if(wt_sum !== 0){
-            this.waterData.push((w_sum / wt_sum).toFixed(2))
-            this.weightData.push((wt_sum / this.dataMsg[i.toString()].weight.length).toFixed(2))
+          if(i.toString() in this.dataMsg){
+            for(let j=0; j<this.dataMsg[i.toString()].weight.length; j++){
+              w_sum += this.dataMsg[i.toString()].water[j] * this.dataMsg[i.toString()].weight[j]
+              wt_sum += this.dataMsg[i.toString()].weight[j]
+            }
+            if(wt_sum !== 0){
+              this.waterData.push((w_sum / wt_sum).toFixed(2))
+              this.weightData.push((wt_sum / this.dataMsg[i.toString()].weight.length).toFixed(2))
+            }
           }
         }
         // let i = 0

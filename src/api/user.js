@@ -62,3 +62,11 @@ export function getUsersData(params) {
     params: params
   })
 }
+
+export function addUserBatch(data) {
+  return request({
+    url: `api/user/batchRegister`,
+    method: 'post',
+    data
+  })
+}

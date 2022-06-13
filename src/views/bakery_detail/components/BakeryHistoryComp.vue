@@ -48,11 +48,11 @@
     <el-dialog
       title="新增烘烤记录"
       :visible.sync="addRecordVisible"
-      v-if="addRecordVisible"
-      width="50%"
-      :show-close="false">
+      width="60%"
+      :show-close="false"
+      @close="resetForm()">
       <el-form ref="recordForm" :model="recordForm" :rules="rules" :size="size">
-        <el-descriptions title="烤前信息" :column="2" border>
+        <el-descriptions :column="3" border>
           <template v-for="(item, index) in beforeLabels">
             <el-descriptions-item
               :label="item.label"
@@ -86,6 +86,17 @@
                     style="width: 100%;"
                     :picker-options="item.key.includes('start') ? startDatePicker : endDatePicker">
                   </el-date-picker>
+                  <el-upload
+                    v-else-if="item.key === 'pics'"
+                    ref="picUpload"
+                    :auto-upload="false"
+                    :on-remove="handleRemove"
+                    :on-change="handleChange"
+                    :file-list="fileList"
+                    list-type="picture-card">
+                    <el-button type="text">{{ pics.length < 2 ? '点击上传' : '已上传2张照片'}}</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，单张图片&lt;1MB</div>
+                  </el-upload>
                   <el-input v-else v-model="recordForm[item.key]" :placeholder="'请输入'+item.label" :size="size"></el-input>
                 </div>
               </el-form-item>
@@ -104,6 +115,7 @@
 <script>
   import { getBakeRecord, addBakeRecord, deleteBakeRecord } from '@/api/bake'
   import { timeFormat } from '/src/utils/index.js'
+  import OSS from 'ali-oss'
 
   let t = '2021-12-30 00:00:00'
   export default{
@@ -114,6 +126,12 @@
     props: ['bakeryMsg'],
     data() {
       return {
+        client: new OSS({
+          region: 'oss-cn-shanghai',
+          bucket: 'tobacco-main-zjw',
+          accessKeyId: 'LTAI5tMVafrugE5RMm9bEy32',
+          accessKeySecret: '6X5NvE6fpXOhU23LUN4Dcg3cura9Bd'
+        }),
         addRecordVisible: false,
         dateRange: null,
         deviceData: null,
@@ -129,19 +147,21 @@
         },
         defaultText: '',
         selectedRecord: [],
+        pics: [],
         beforeLabels: [
           { key: 'leaf_kind', label: '烟叶品种', span: 1 },
-          { key: 'leaf_area', label: '烟叶部位', span: 1 },
-          { key: 'leaf_maturity', label: '烟叶成熟度', span: 1 },
-          { key: 'leaf_quality', label: '烟叶素质', span: 1 },
           { key: 'water_rate', label: '含水率（%）', span: 1 },
-          { key: 'single_leaf_before', label: '单叶重（克）', span: 1 },
-          { key: 'baking_weight_before', label: '装烟量（千克）', span: 1 },
-          { key: 'install_way', label: '装烟方式', span: 1 },
-          { key: 'start_time', label: '开始时间', span: 1 },
-          { key: 'end_time', label: '结束时间', span: 1 },
           { key: 'farmer_id', label: '烟农编号', span: 1 },
+          { key: 'leaf_area', label: '烟叶部位', span: 1 },
+          { key: 'single_leaf_before', label: '单叶重（克）', span: 1 },
           { key: 'technician_id', label: '技师编号', span: 1 },
+          { key: 'leaf_maturity', label: '烟叶成熟度', span: 1 },
+          { key: 'baking_weight_before', label: '装烟量（千克）', span: 1 },
+          { key: 'start_time', label: '开始时间', span: 1 },
+          { key: 'leaf_quality', label: '烟叶素质', span: 1 },
+          { key: 'install_way', label: '装烟方式', span: 1 },
+          { key: 'end_time', label: '结束时间', span: 1 },
+          { key: 'pics', label: '烤前照片', span: 1 },
         ],
         recordForm: {
           device_id: null,
@@ -154,7 +174,8 @@
           baking_weight_before: null,
           install_way: null,
           start_time: null,
-          end_time: null
+          end_time: null,
+          bake_pic_before: null,
         },
         rules: {
           leaf_kind : [
@@ -193,7 +214,7 @@
           ],
           technician_id : [
             {required: true, message: '请输入技师编号', trigger: 'blur'},
-          ],
+          ]
         }
       }
     },
@@ -251,10 +272,29 @@
           this.fetchData()
         }
       },
+      // 图片Change事件
+      handleChange(file, fileList) {
+        console.log(file, fileList)
+        let fileSize = file.raw.size / 1024 / 1024
+        if(fileSize > 1) {
+          fileList.pop()
+          alert('单张图片不得超过1M')
+        }
+        if(fileList.length > 2) {
+          fileList.shift()
+        }
+        this.pics = fileList
+      },
       // 烘烤记录点击事件
       nodeClick(data, node, comp){
         this.selectedRecord = data.id
         this.$emit('watchHistory', data)
+      },
+      resetForm(){
+        console.log(this.$refs)
+        this.$refs['picUpload'][0].clearFiles()
+        this.$refs['recordForm'].resetFields()
+        this.pics = []
       },
       // 请求烘烤记录
       requestBakeryRecord(rdata) {
@@ -282,7 +322,7 @@
         let result = []
         // 后端返回的烘烤记录按时间顺序排序，这里将其倒序
         data = data.reverse()
-        // 将数据处理成el-tree接受的格式化
+        // 将数据处理成el-tree接受的格式
         data.forEach(d => {
           let temp = {
             id: d.id,
@@ -314,31 +354,45 @@
         }
         this.requestDeleteRecord(rdata)
       },
-      addConfirmClick(formName) {
+      async addConfirmClick(formName) {
+        let validFlag = false
         this.$refs[formName].validate((valid) => {
           if(valid) {
-            let rdata = Object.assign({}, this.recordForm)
-            rdata.start_time = timeFormat(rdata.start_time, 0, 5)
-            rdata.end_time = timeFormat(rdata.end_time, 0, 5)
-            console.log('recordForm', rdata)
-            this.requestAddRecord(rdata)
+            validFlag = true
           }
           else {
+            validFlag = false
             return false
           }
         })
-      },
-      requestAddRecord(rdata) {
-        addBakeRecord(rdata).then(res => {
-          console.log('addBakeRecord', res)
-          if(res.code === 200){
-            this.$message({message: '新增烘烤记录成功', type: 'success'})
-            this.addRecordVisible = false
-            this.fetchData()
+        if(validFlag) {
+          // 先上传图片到OSS，获取图片URL
+          let imgUrls = ''
+          for(let pic of this.pics){
+            let res = await this.client.put(`${Math.random()}-${pic.raw.name}`, pic.raw)
+            if(res.res.status !== 200){
+              this.$message.error('上传图片发生错误，请稍后重试！')
+              return false
+            }
+            imgUrls += res.url + ';'
           }
-        }).catch(err => {
-          this.$message.error(err)
-        })
+
+          // 后保存到数据库
+          let rdata = Object.assign({}, this.recordForm)
+          rdata.start_time = timeFormat(rdata.start_time, 0, 5)
+          rdata.end_time = timeFormat(rdata.end_time, 0, 5)
+          rdata.bake_pic_before = imgUrls
+          console.log('recordForm', rdata)
+          this.requestAddRecord(rdata)
+        }
+      },
+      async requestAddRecord(rdata) {
+        let res = await addBakeRecord(rdata)
+        if(res.code === 200) {
+          this.$message({message: '新增烘烤记录成功', type: 'success'})
+          this.addRecordVisible = false
+          this.fetchData()
+        }
       },
       requestDeleteRecord(rdata) {
         deleteBakeRecord(rdata).then(res => {
